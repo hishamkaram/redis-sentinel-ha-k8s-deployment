@@ -25,7 +25,12 @@ metadata:
   labels:
     name: redis-ha-cluster-startup-redis-master-service-lbl
   name: redis-ha-cluster-startup-redis-master-service
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+    beta.cloud.google.com/backend-config: '{"default": "redis-backend-config"}'
 spec:
+  type: LoadBalancer
+  loadBalancerIP: 20.0.4.4
   ports:
     - port: 6379
       targetPort: 6379

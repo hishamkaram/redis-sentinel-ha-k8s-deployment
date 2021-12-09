@@ -29,7 +29,7 @@ spec:
           tolerationSeconds: 100
       containers:
         - name: redis-ha-cluster-sentinel-c1
-          image: redis-sentinel-ha-cluster:1.0
+          image: asia.gcr.io/adasiadigitalplatformforpub/redis-ha:v1
           resources:
             requests:
               memory: "100Mi"
@@ -43,3 +43,11 @@ spec:
           env:
             - name: SENTINEL
               value: "true"
+            - name: REDIS_HA_CLUSTER_STARTUP_REDIS_MASTER_SERVICE_SERVICE_HOST
+              value: "20.0.4.4"
+            - name: REDIS_HA_CLUSTER_STARTUP_REDIS_MASTER_SERVICE_SERVICE_PORT
+              value: "6379"
+            - name: REDIS_HA_CLUSTER_SENTINEL_SERVICE_SERVICE_HOST
+              value: "20.0.4.3"
+            - name: REDIS_HA_CLUSTER_SENTINEL_SERVICE_SERVICE_PORT
+              value: "26379"
