@@ -14,31 +14,55 @@ spec:
         app: redis-ha-cluster-redis-slave-lbl
         slave: "true"
     spec:
+      restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
+        - key: node.kubernetes.io/memory-pressure
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
+      initContainers:
+        - name: disable-thp
+          image: redis-sentinel-ha-cluster:1.0
+          volumeMounts:
+            - name: host-sys
+              mountPath: /sys
+          command:
+            [
+              "sh",
+              "-c",
+              "echo never >/sys/kernel/mm/transparent_hugepage/enabled;echo never > /sys/kernel/mm/transparent_hugepage/defrag",
+            ]
+          securityContext:
+            privileged: true
+      containers:
+        - name: redis-ha-cluster-redis-c1
+          image: redis-sentinel-ha-cluster:1.0
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: ".2"
+            limits:
+              memory: "16Gi"
+              cpu: "2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /redis-data
+              name: redis-directory-binding
+              readOnly: false
       volumes:
         - hostPath:
             path: /tmp/data/2
           name: redis-directory-binding
-
-      restartPolicy: Always
-
-      containers:
-      - name: redis-ha-cluster-redis-c1
-        image: redis-sentinel-ha-cluster:1.0
-
-        resources:
-          requests:
-            memory: "100Mi"
-            cpu: .2
-          limits:
-            memory: "200Mi"
-            cpu: .5
-
-        imagePullPolicy: IfNotPresent
-
-        ports:
-        - containerPort: 6379
-
-        volumeMounts:
-          - mountPath: /redis-data
-            name: redis-directory-binding
-            readOnly: false
+        - name: host-sys
+          hostPath:
+            path: /sys

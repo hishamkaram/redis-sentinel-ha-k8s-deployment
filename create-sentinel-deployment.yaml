@@ -14,24 +14,32 @@ spec:
         app: redis-ha-cluster-sentinel-lbl
     spec:
       restartPolicy: Always
-
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
+        - key: node.kubernetes.io/memory-pressure
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 100
       containers:
-      - name: redis-ha-cluster-sentinel-c1
-        image: redis-sentinel-ha-cluster:1.0
-
-        resources:
-          requests:
-            memory: "100Mi"
-            cpu: .2
-          limits:
-            memory: "200Mi"
-            cpu: .5
-
-        imagePullPolicy: IfNotPresent
-
-        ports:
-        - containerPort: 26379
-
-        env:
-        - name: SENTINEL
-          value: "true"
+        - name: redis-ha-cluster-sentinel-c1
+          image: redis-sentinel-ha-cluster:1.0
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: ".2"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 26379
+          env:
+            - name: SENTINEL
+              value: "true"

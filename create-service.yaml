@@ -4,14 +4,21 @@ metadata:
   labels:
     name: redis-ha-cluster-sentinel-service-lbl
   name: redis-ha-cluster-sentinel-service
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+    beta.cloud.google.com/backend-config: '{"default": "redis-backend-config"}'
 spec:
+  type: LoadBalancer
+  loadBalancerIP: 20.0.4.3
   ports:
     - port: 26379
+      targetPort: 26379
+      protocol: TCP
+      name: redis-sentinel
   selector:
     app: redis-ha-cluster-sentinel-lbl
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,5 +28,8 @@ metadata:
 spec:
   ports:
     - port: 6379
+      targetPort: 6379
+      protocol: TCP
+      name: redis
   selector:
     app: redis-ha-cluster-redis-master-lbl
