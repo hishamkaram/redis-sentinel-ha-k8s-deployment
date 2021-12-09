@@ -14,17 +14,6 @@ spec:
         app: redis-ha-cluster-redis-slave-lbl
         slave: "true"
     spec:
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #     - labelSelector:
-      #         matchExpressions:
-      #         - key: master
-      #           operator: In
-      #           values:
-      #           - "true"
-      #       topologyKey: "kubernetes.io/hostname"
-
       volumes:
         - hostPath:
             path: /tmp/data/2

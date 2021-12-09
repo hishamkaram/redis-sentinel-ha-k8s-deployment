@@ -13,17 +13,6 @@ spec:
       labels:
         app: redis-ha-cluster-sentinel-lbl
     spec:
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #     - labelSelector:
-      #         matchExpressions:
-      #         - key: app
-      #           operator: In
-      #           values:
-      #           - redis-ha-cluster-sentinel-lbl
-      #       topologyKey: "kubernetes.io/hostname"
-
       restartPolicy: Always
 
       containers:
