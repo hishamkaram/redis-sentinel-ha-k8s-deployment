@@ -1,6 +1,6 @@
 FROM redis:latest
 
-MAINTAINER Sarwesh Suman
+LABEL maintainer="Sarwesh Suman"
 
 RUN apt-get install bash \
     sed
