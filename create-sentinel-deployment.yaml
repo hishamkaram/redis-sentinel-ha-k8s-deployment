@@ -29,7 +29,7 @@ spec:
           tolerationSeconds: 100
       containers:
         - name: redis-ha-cluster-sentinel-c1
-          image: asia.gcr.io/adasiadigitalplatformforpub/redis-ha:v1
+          image: asia.gcr.io/adasiadigitalplatformforpub/redis-ha:v3
           resources:
             requests:
               memory: "100Mi"
